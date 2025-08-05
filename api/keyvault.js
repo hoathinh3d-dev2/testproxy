@@ -1,4 +1,9 @@
 import axios from "axios";
+import https from "https"; // 👈 Thêm dòng này
+
+const httpsAgent = new https.Agent({
+  rejectUnauthorized: false, // ⚠️ Bỏ qua xác minh chứng chỉ SSL
+});
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -23,6 +28,7 @@ export default async function handler(req, res) {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
+        httpsAgent, // 👈 Thêm dòng này
       }
     );
 
