@@ -1,10 +1,10 @@
 import axios from "axios";
 import https from "https";
 
-// const httpsAgent = new https.Agent({
-//   rejectUnauthorized: true,
-//   servername: "cms.emimfi.com"
-// });
+const httpsAgent = new https.Agent({
+  rejectUnauthorized: true,
+  servername: "cms.emimfi.com"
+});
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -18,10 +18,10 @@ export default async function handler(req, res) {
       req.body, // 👈 Forward toàn bộ body
       {
         headers: {
-          "Content-Type": "application/json", // 👈 sửa tùy endpoint phía sau
+          // "Content-Type": "application/json", // 👈 sửa tùy endpoint phía sau
           ...req.headers, // giữ nguyên headers nếu cần
         },
-        // httpsAgent,
+        httpsAgent,
       }
     );
 
