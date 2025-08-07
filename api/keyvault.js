@@ -12,15 +12,10 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Gửi dữ liệu gốc đi luôn
     const response = await axios.post(
       "https://cms.emimfi.com:5000/api/Webchannel/Post",
-      req.body, // 👈 Forward toàn bộ body
+      req.body,
       {
-        headers: {
-          // "Content-Type": "application/json", // 👈 sửa tùy endpoint phía sau
-          ...req.headers, // giữ nguyên headers nếu cần
-        },
         httpsAgent,
       }
     );
