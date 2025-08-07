@@ -3,7 +3,7 @@ import https from "https";
 
 const httpsAgent = new https.Agent({
   rejectUnauthorized: true,
-  servername: "cms.emimfi.com"
+  // servername: "cms.emimfi.com"
 });
 
 export default async function handler(req, res) {
