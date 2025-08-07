@@ -20,7 +20,7 @@ export default async function handler(req, res) {
           "Content-Type": "application/json", // 👈 sửa tùy endpoint phía sau
           ...req.headers, // giữ nguyên headers nếu cần
         },
-        // httpsAgent,
+        httpsAgent,
       }
     );
 
