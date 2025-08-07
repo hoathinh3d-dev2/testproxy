@@ -1,8 +1,8 @@
 import axios from "axios";
-import https from "https"; // 👈 Thêm dòng này
+import https from "https";
 
 const httpsAgent = new https.Agent({
-  rejectUnauthorized: false, // ⚠️ Bỏ qua xác minh chứng chỉ SSL
+  rejectUnauthorized: false, // ⚠️ Chỉ nên dùng trong môi trường dev
 });
 
 export default async function handler(req, res) {
@@ -10,31 +10,25 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { clientId, clientSecret } = req.body;
-
-  if (!clientId || !clientSecret) {
-    return res.status(400).json({ error: "Missing clientId or clientSecret" });
-  }
-
   try {
-    const params = new URLSearchParams();
-    params.append("clientId", clientId);
-    params.append("clientSecret", clientSecret);
-
+    // Gửi dữ liệu gốc đi luôn
     const response = await axios.post(
-      "https://keyvault.emimfi.com:2025/api/v1/auth/universal-auth/login",
-      params,
+      "https://cms.emimfi.com:5000/api/Webchannel/Post",
+      req.body, // 👈 Forward toàn bộ body
       {
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
+          "Content-Type": "application/json", // 👈 sửa tùy endpoint phía sau
+          ...req.headers, // giữ nguyên headers nếu cần
         },
-        httpsAgent, // 👈 Thêm dòng này
+        httpsAgent,
       }
     );
 
-    res.status(200).json(response.data);
+    res.status(response.status).json(response.data);
   } catch (error) {
     console.error("Proxy Error:", error.message);
-    res.status(500).json({ error: "Proxy error", details: error.message });
+    const status = error.response?.status || 500;
+    const details = error.response?.data || error.message;
+    res.status(status).json({ error: "Proxy error", details });
   }
 }
