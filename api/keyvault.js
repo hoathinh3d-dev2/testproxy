@@ -2,7 +2,8 @@ import axios from "axios";
 import https from "https";
 
 const httpsAgent = new https.Agent({
-  rejectUnauthorized: false, // ⚠️ Chỉ nên dùng trong môi trường dev
+  rejectUnauthorized: true,
+  servername: "cms.emimfi.com"
 });
 
 export default async function handler(req, res) {
@@ -20,7 +21,7 @@ export default async function handler(req, res) {
           "Content-Type": "application/json", // 👈 sửa tùy endpoint phía sau
           ...req.headers, // giữ nguyên headers nếu cần
         },
-        // httpsAgent,
+        httpsAgent,
       }
     );
 
