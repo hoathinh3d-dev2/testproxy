@@ -3,7 +3,7 @@ import https from "https";
 
 const httpsAgent = new https.Agent({
   rejectUnauthorized: true,
-  // servername: "cms.emimfi.com"
+  servername: "cms.emimfi.com"
 });
 
 export default async function handler(req, res) {
@@ -12,10 +12,14 @@ export default async function handler(req, res) {
   }
 
   try {
+    console.log("Forwarding headers:", req.headers);
     const response = await axios.post(
       "https://cms.emimfi.com:5000/api/Webchannel/Post",
       req.body,
       {
+        headers: {
+          ...req.headers,
+        },
         httpsAgent,
       }
     );
